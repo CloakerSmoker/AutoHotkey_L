@@ -32,8 +32,9 @@ jobs:
 
     - name: Info
       run: |
-        echo "Branch: ${{ github.event.inputs.branch }}, Commit:" >> $GITHUB_STEP_SUMMARY
-        git log -1 '--format=format:%H' >> $GITHUB_STEP_SUMMARY
+        $info = "Branch: ${{ github.event.inputs.branch }}, Commit: " + (git log -1 '--format=format:%H')
+        echo $info >> $GITHUB_STEP_SUMMARY
+        echo "info=" + $info >> $GITHUB_OUTPUT
 
     - name: Build
       run: msbuild .\AutoHotkeyx.sln /t:Rebuild /p:Configuration=Debug /p:Platform="x64"
@@ -41,5 +42,5 @@ jobs:
     - name: Save output
       uses: actions/upload-artifact@v3
       with:
-        name: "${{ github.event.inputs.branch }}-AutoHotkey.exe"
+        name: "AutoHotkey.exe"
         path: bin\x64w_debug\AutoHotkey.exe
