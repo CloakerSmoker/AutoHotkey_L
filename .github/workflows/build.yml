@@ -13,6 +13,8 @@ on:
         type: string
         required: true
 
+run-name: Build ${{ inputs.branch }}
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -28,8 +30,14 @@ jobs:
         ref: "${{ github.event.inputs.branch }}"
     - uses: ilammy/msvc-dev-cmd@v1
 
+    - name: Info
+      run: |
+        echo "Branch: ${{ github.event.inputs.branch }}, Commit:" >> $GITHUB_STEP_SUMMARY
+        git log -1 '--format=format:%H' >> $GITHUB_STEP_SUMMARY
+
     - name: Build
       run: msbuild .\AutoHotkeyx.sln /t:Rebuild /p:Configuration=Debug /p:Platform="x64"
+
     - name: Save output
       uses: actions/upload-artifact@v3
       with:
