@@ -25,3 +25,8 @@ jobs:
 
     - name: Build
       run: msbuild .\AutoHotkeyx.sln /t:Rebuild /p:Configuration=Debug /p:Platform="x64"
+    - name: Save output
+      uses: actions/upload-artifact@v3
+      with:
+        name: AutoHotkey.exe
+        path: bin\x64w_debug\AutoHotkey.exe
